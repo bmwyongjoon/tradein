@@ -6,251 +6,157 @@
 <meta name="theme-color" content="#1c3d6e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="트레이드인 진단">
+<meta name="apple-mobile-web-app-title" content="트레이드인 체크">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>트레이드인 진단</title>
+<title>트레이드인 체크</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
-
   :root {
-    --bmw-blue: #1c3d6e;
-    --bmw-light: #eef2f8;
-    --bmw-mid: #4a6fa8;
-    --mini-black: #111111;
-    --mini-light: #f2f2f2;
-    --mini-mid: #555555;
-    --primary: #1c3d6e;
-    --primary-light: #eef2f8;
-    --primary-mid: #4a6fa8;
-    --white: #ffffff;
-    --gray-100: #f7f8fa;
-    --gray-200: #e8eaed;
-    --gray-400: #9aa0a9;
-    --gray-600: #5f6368;
-    --gray-900: #1a1a2e;
-    --success: #2e7d32;
-    --success-light: #e8f5e9;
-    --danger: #c62828;
-    --danger-light: #ffebee;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --bmw-blue: #1c3d6e; --bmw-light: #eef2f8;
+    --mini-black: #111111; --mini-light: #f2f2f2;
+    --white: #ffffff; --gray-100: #f7f8fa; --gray-200: #e8eaed;
+    --gray-400: #9aa0a9; --gray-600: #5f6368; --gray-900: #1a1a2e;
+    --success: #2e7d32; --success-light: #e8f5e9;
+    --danger: #c62828; --danger-light: #ffebee;
+    --warning: #b8860b; --warning-light: #fff9e6;
+    --radius: 12px; --radius-sm: 8px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--gray-100);
-    color: var(--gray-900);
-    min-height: 100vh;
-    min-height: 100dvh;
-    overscroll-behavior: none;
-  }
-
-  /* ===== SCREENS ===== */
-  .screen { display: none; min-height: 100vh; min-height: 100dvh; flex-direction: column; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--gray-100); color: var(--gray-900); min-height: 100dvh; overscroll-behavior: none; }
+  .screen { display: none; min-height: 100dvh; flex-direction: column; }
   .screen.active { display: flex; }
 
-  /* ===== BRAND SELECT ===== */
-  #screen-brand {
-    background: var(--white);
-    align-items: center;
-    justify-content: center;
-    padding: 32px 24px;
-  }
-  .brand-logo-area { text-align: center; margin-bottom: 48px; }
-  .brand-logo-area h1 { font-size: 13px; font-weight: 500; color: var(--gray-400); letter-spacing: 2px; margin-bottom: 6px; }
-  .brand-logo-area p { font-size: 22px; font-weight: 700; color: var(--gray-900); }
-  .brand-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 360px; }
-  .brand-card {
-    border-radius: var(--radius);
-    padding: 28px 24px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
+  /* ===== HOME ===== */
+  #screen-home { background: var(--white); flex-direction: column; padding: 0; }
+  .home-header { background: var(--bmw-blue); padding: 52px 24px 28px; }
+  .home-name { font-size: 12px; font-weight: 500; letter-spacing: 2px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+  .home-title { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .home-sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .home-body { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .home-section-label { font-size: 11px; font-weight: 500; letter-spacing: 1.5px; color: var(--gray-400); margin-bottom: 2px; margin-top: 4px; }
+
+  .brand-card { border-radius: var(--radius); padding: 22px 20px; cursor: pointer; transition: transform 0.15s; position: relative; overflow: hidden; }
   .brand-card:active { transform: scale(0.98); }
   .brand-card.bmw { background: var(--bmw-blue); }
   .brand-card.mini { background: var(--mini-black); }
-  .brand-card-label { font-size: 11px; font-weight: 500; letter-spacing: 2px; opacity: 0.6; color: #fff; margin-bottom: 6px; }
-  .brand-card-name { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .brand-card-sub { font-size: 13px; color: rgba(255,255,255,0.6); }
-  .brand-card-arrow { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 20px; color: rgba(255,255,255,0.4); }
-  .brand-contact { margin-top: 36px; text-align: center; }
-  .brand-contact p { font-size: 12px; color: var(--gray-400); line-height: 1.6; }
+  .brand-card-label { font-size: 10px; font-weight: 500; letter-spacing: 2px; opacity: 0.6; color: #fff; margin-bottom: 4px; }
+  .brand-card-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .brand-card-sub { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .brand-card-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 18px; color: rgba(255,255,255,0.4); }
 
-  /* ===== HEADER ===== */
-  .app-header {
-    padding: 52px 20px 16px;
-    flex-shrink: 0;
-  }
+  .menu-card { border-radius: var(--radius); padding: 16px 18px; cursor: pointer; transition: transform 0.15s; background: var(--white); border: 1.5px solid var(--gray-200); display: flex; align-items: center; gap: 14px; }
+  .menu-card:active { transform: scale(0.98); background: var(--gray-100); }
+  .menu-icon { font-size: 22px; flex-shrink: 0; }
+  .menu-text { font-size: 15px; font-weight: 500; color: var(--gray-900); }
+  .menu-arrow { margin-left: auto; font-size: 14px; color: var(--gray-400); }
+
+  .home-contact { padding: 16px 20px 32px; display: flex; gap: 8px; }
+  .home-contact-btn { flex: 1; padding: 13px 8px; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200); background: var(--white); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
+  .home-contact-btn:active { transform: scale(0.97); }
+  .home-contact-icon { font-size: 20px; }
+  .home-contact-text { font-size: 12px; font-weight: 500; color: var(--gray-900); }
+
+  /* ===== INFO SCREENS ===== */
+  .info-header { padding: 52px 20px 16px; flex-shrink: 0; background: var(--bmw-blue); }
+  .info-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .info-header-back { font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; }
+  .info-header-title { font-size: 18px; font-weight: 700; color: #fff; }
+  .info-body { flex: 1; padding: 20px; overflow-y: auto; }
+  .info-section { background: var(--white); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; border: 1.5px solid var(--gray-200); }
+  .info-section-title { font-size: 13px; font-weight: 700; color: var(--gray-400); letter-spacing: 0.5px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-200); }
+  .info-item { font-size: 13px; color: var(--gray-900); line-height: 1.8; padding-left: 14px; position: relative; }
+  .info-item::before { content: '·'; position: absolute; left: 2px; color: var(--gray-400); }
+  .info-note { font-size: 12px; color: var(--gray-600); line-height: 1.7; margin-top: 10px; padding: 10px; background: var(--gray-100); border-radius: var(--radius-sm); }
+  .info-step { margin-bottom: 14px; }
+  .info-step-num { font-size: 12px; font-weight: 700; color: var(--bmw-blue); margin-bottom: 4px; }
+  .info-step-text { font-size: 13px; color: var(--gray-900); line-height: 1.7; }
+
+  /* ===== DIAGNOSIS HEADER ===== */
+  .app-header { padding: 52px 20px 16px; flex-shrink: 0; }
   .app-header.bmw { background: var(--bmw-blue); }
   .app-header.mini { background: var(--mini-black); }
   .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .header-brand { font-size: 12px; font-weight: 500; letter-spacing: 2px; color: rgba(255,255,255,0.7); }
-  .header-back { font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; padding: 4px 0; }
+  .header-nav { display: flex; gap: 14px; }
+  .header-back-q { font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer; padding: 4px 0; }
+  .header-home { font-size: 13px; color: rgba(255,255,255,0.5); cursor: pointer; padding: 4px 0; }
   .header-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 16px; }
   .progress-bar { height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; }
   .progress-fill { height: 3px; border-radius: 2px; background: #fff; transition: width 0.3s ease; }
   .progress-text { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 6px; }
 
   /* ===== BODY ===== */
-  .app-body {
-    flex: 1;
-    padding: 20px 20px 32px;
-    overflow-y: auto;
-  }
-
-  /* ===== QUESTION ===== */
+  .app-body { flex: 1; padding: 20px 20px 32px; overflow-y: auto; }
   .question-label { font-size: 12px; font-weight: 500; letter-spacing: 1px; color: var(--gray-400); margin-bottom: 10px; }
   .question-text { font-size: 18px; font-weight: 700; color: var(--gray-900); line-height: 1.4; margin-bottom: 6px; }
   .question-hint { font-size: 13px; color: var(--gray-600); margin-bottom: 20px; line-height: 1.5; }
-
   .options { display: flex; flex-direction: column; gap: 10px; }
-  .option {
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--white);
-  }
+  .option { border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 14px 16px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 12px; background: var(--white); }
   .option:active { transform: scale(0.99); }
   .option.selected.bmw { border-color: var(--bmw-blue); background: var(--bmw-light); }
   .option.selected.mini { border-color: var(--mini-black); background: var(--mini-light); }
-  .option-radio {
-    width: 20px; height: 20px; border-radius: 50%;
-    border: 1.5px solid var(--gray-200);
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-  }
+  .option-radio { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gray-200); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .option.selected.bmw .option-radio { border-color: var(--bmw-blue); background: var(--bmw-blue); }
   .option.selected.mini .option-radio { border-color: var(--mini-black); background: var(--mini-black); }
-  .option-radio::after {
-    content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff;
-    opacity: 0; transition: opacity 0.15s;
-  }
+  .option-radio::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity 0.15s; }
   .option.selected .option-radio::after { opacity: 1; }
   .option-text { font-size: 14px; color: var(--gray-900); line-height: 1.4; }
   .option.selected .option-text { font-weight: 500; }
-
-  /* ===== BUTTONS ===== */
-  .btn-primary {
-    width: 100%; padding: 15px;
-    border: none; border-radius: var(--radius);
-    font-size: 15px; font-weight: 700;
-    font-family: 'Noto Sans KR', sans-serif;
-    cursor: pointer; transition: all 0.15s;
-    margin-top: 20px;
-  }
+  .btn-primary { width: 100%; padding: 15px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: all 0.15s; margin-top: 20px; }
   .btn-primary:active { transform: scale(0.99); }
   .btn-primary.bmw { background: var(--bmw-blue); color: #fff; }
   .btn-primary.mini { background: var(--mini-black); color: #fff; }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
 
   /* ===== RESULT ===== */
-  .result-card {
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
+  .result-card { border-radius: var(--radius); padding: 24px; margin-bottom: 16px; text-align: center; }
   .result-card.possible { background: var(--success-light); border: 1.5px solid #a5d6a7; }
   .result-card.impossible { background: var(--danger-light); border: 1.5px solid #ef9a9a; }
+  .result-card.warning { background: var(--warning-light); border: 1.5px solid #ffe082; }
   .result-icon { font-size: 36px; margin-bottom: 10px; }
   .result-promo-name { font-size: 12px; font-weight: 500; letter-spacing: 1px; margin-bottom: 6px; }
   .result-promo-name.possible { color: var(--success); }
   .result-promo-name.impossible { color: var(--danger); }
-  .result-percent { font-size: 52px; font-weight: 700; line-height: 1; }
-  .result-percent.possible { color: var(--success); }
-  .result-percent.impossible { color: var(--danger); font-size: 24px; margin-top: 8px; }
-  .result-desc { font-size: 13px; color: var(--gray-600); margin-top: 8px; line-height: 1.6; }
-
+  .result-promo-name.warning { color: var(--warning); }
+  .result-percent { font-size: 52px; font-weight: 700; line-height: 1; color: var(--success); }
+  .result-desc { font-size: 13px; color: var(--gray-600); margin-top: 8px; line-height: 1.6; white-space: pre-line; }
   .contact-section { margin-bottom: 16px; }
   .contact-label { font-size: 12px; font-weight: 500; letter-spacing: 1px; color: var(--gray-400); margin-bottom: 10px; }
   .contact-buttons { display: flex; gap: 8px; }
-  .contact-btn {
-    flex: 1; padding: 13px 8px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--gray-200);
-    background: var(--white);
-    cursor: pointer; transition: all 0.15s;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 5px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+  .contact-btn { flex: 1; padding: 13px 8px; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200); background: var(--white); cursor: pointer; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 5px; font-family: 'Noto Sans KR', sans-serif; }
   .contact-btn:active { transform: scale(0.97); }
   .contact-btn-icon { font-size: 20px; }
   .contact-btn-text { font-size: 12px; font-weight: 500; color: var(--gray-900); }
-
-  /* ===== DOCUMENT ===== */
-  .doc-toggle {
-    width: 100%; padding: 14px 16px;
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    background: var(--white);
-    display: flex; align-items: center; justify-content: space-between;
-    cursor: pointer; margin-bottom: 10px;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
+  .doc-toggle { width: 100%; padding: 14px 16px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); background: var(--white); display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif; }
   .doc-toggle-left { display: flex; align-items: center; gap: 10px; }
   .doc-toggle-icon { font-size: 16px; }
   .doc-toggle-text { font-size: 14px; font-weight: 500; color: var(--gray-900); }
   .doc-toggle-arrow { font-size: 12px; color: var(--gray-400); transition: transform 0.2s; }
   .doc-toggle.open .doc-toggle-arrow { transform: rotate(180deg); }
-
-  .doc-content {
-    display: none;
-    background: var(--white);
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 10px;
-    margin-top: -6px;
-  }
+  .doc-content { display: none; background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; margin-top: -6px; }
   .doc-content.open { display: block; }
-
   .doc-section { margin-bottom: 16px; }
   .doc-section:last-child { margin-bottom: 0; }
-  .doc-section-title {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
-    color: var(--gray-400); margin-bottom: 8px;
-    padding-bottom: 6px; border-bottom: 1px solid var(--gray-200);
-  }
+  .doc-section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; color: var(--gray-400); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-200); }
   .doc-item { font-size: 13px; color: var(--gray-900); line-height: 1.7; padding-left: 12px; position: relative; }
   .doc-item::before { content: '·'; position: absolute; left: 2px; color: var(--gray-400); }
   .doc-note { font-size: 12px; color: var(--gray-600); line-height: 1.6; margin-top: 8px; padding: 10px; background: var(--gray-100); border-radius: var(--radius-sm); }
-  .doc-highlight { background: #fff9c4; border-radius: 3px; padding: 0 3px; font-weight: 500; }
-
-  .btn-reset {
-    width: 100%; padding: 13px;
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    background: var(--white);
-    font-size: 14px; font-weight: 500; color: var(--gray-600);
-    cursor: pointer; margin-top: 6px;
-    font-family: 'Noto Sans KR', sans-serif;
-    transition: all 0.15s;
-  }
+  .btn-reset { width: 100%; padding: 13px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); background: var(--white); font-size: 14px; font-weight: 500; color: var(--gray-600); cursor: pointer; margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
   .btn-reset:active { background: var(--gray-100); }
 </style>
 </head>
 <body>
 
-<!-- ===== BRAND SELECT ===== -->
-<div id="screen-brand" class="screen active">
-  <div class="brand-logo-area">
-    <h1>BPS 가양 전시장</h1>
-    <p>트레이드인 진단</p>
+<!-- ===== HOME ===== -->
+<div id="screen-home" class="screen active">
+  <div class="home-header">
+    <div class="home-name">BPS 가양 전시장</div>
+    <div class="home-title">장용준 주임</div>
+    <div class="home-sub">010-3384-3507</div>
   </div>
-  <div class="brand-cards">
+  <div class="home-body">
+    <div class="home-section-label">트레이드인 진단</div>
     <div class="brand-card bmw" onclick="selectBrand('bmw')">
       <div class="brand-card-label">TRADE-IN / RIDE AGAIN</div>
       <div class="brand-card-name">BMW</div>
@@ -263,23 +169,142 @@
       <div class="brand-card-sub">신차 트레이드인 진단</div>
       <div class="brand-card-arrow">›</div>
     </div>
+    <div class="home-section-label" style="margin-top:4px">안내</div>
+    <div class="menu-card" onclick="showScreen('screen-doc')">
+      <span class="menu-icon">📋</span>
+      <span class="menu-text">매입 서류 안내</span>
+      <span class="menu-arrow">›</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-handover')">
+      <span class="menu-icon">🚗</span>
+      <span class="menu-text">지정 반납 안내</span>
+      <span class="menu-arrow">›</span>
+    </div>
   </div>
-  <div class="brand-contact">
-    <p>BPS 가양 전시장 장용준 주임<br>010-3384-3507</p>
+  <div class="home-contact">
+    <button class="home-contact-btn" onclick="window.location.href='tel:01033843507'">
+      <span class="home-contact-icon">📞</span>
+      <span class="home-contact-text">전화</span>
+    </button>
+    <button class="home-contact-btn" onclick="sendSMS()">
+      <span class="home-contact-icon">💬</span>
+      <span class="home-contact-text">문자</span>
+    </button>
+    <button class="home-contact-btn" onclick="window.open('https://open.kakao.com/o/sVJ7zkGf','_blank')">
+      <span class="home-contact-icon">🟡</span>
+      <span class="home-contact-text">카카오톡</span>
+    </button>
   </div>
 </div>
 
-<!-- ===== DIAGNOSIS SCREEN ===== -->
+<!-- ===== 매입 서류 안내 ===== -->
+<div id="screen-doc" class="screen">
+  <div class="info-header">
+    <div class="info-header-top">
+      <span class="info-header-back" onclick="showScreen('screen-home')">← 뒤로</span>
+    </div>
+    <div class="info-header-title">매입 서류 안내</div>
+  </div>
+  <div class="info-body">
+
+    <div class="info-section">
+      <div class="info-section-title">리스 / 개인사업자</div>
+      <div class="info-item">위임설정 — BMW파이낸셜 고객센터 1577-5822</div>
+      <div class="info-item">위임자: 도이치모터스 BPS 가양지점 장용준 주임 (010-3384-3507)</div>
+      <div class="info-item">본인서명사실확인서 1부 (용도: 리스사제출용 기입)</div>
+      <div class="info-item">사업자등록증</div>
+      <div class="info-item">자동차등록증</div>
+      <div class="info-item">차량 키 전부 + 매뉴얼북</div>
+      <div class="info-item">통장사본</div>
+      <div class="info-note">통장사본·사업자등록증은 이미지로 보내주셔도 됩니다. 차량 보내주실 때 차 안에 함께 넣어주세요.</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">리스 / 개인</div>
+      <div class="info-item">위임설정 — BMW파이낸셜 고객센터 1577-5822</div>
+      <div class="info-item">위임자: 도이치모터스 BPS 가양지점 장용준 주임 (010-3384-3507)</div>
+      <div class="info-item">본인서명사실확인서 1부 (용도: 리스사제출용 기입)</div>
+      <div class="info-item">자동차등록증</div>
+      <div class="info-item">차량 키 전부 + 매뉴얼북</div>
+      <div class="info-item">통장사본</div>
+      <div class="info-note">통장사본은 이미지로 보내주셔도 됩니다.</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">현금 / 법인</div>
+      <div class="info-item">자동차매도용인감증명서</div>
+      <div class="info-item">통장사본</div>
+      <div class="info-item">법인사업자등록증</div>
+      <div class="info-item">법인등기사항증명서 (말소사항 포함)</div>
+      <div class="info-item">전자세금계산서 영수증</div>
+      <div class="info-item">자동차등록증 · 차량 매뉴얼 · 차량키 전부</div>
+      <div class="info-note">매도용인감증명서 작성: 법인명 도이치모터스(주) / 법인번호 194211-0042721 / 소재지 서울특별시 강서구 양천로53길 30, 103호(가양동)</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">트레이드인 관련 서류 (공통)</div>
+      <div class="info-item">신차 자동차등록증</div>
+      <div class="info-item">신차 MSRP</div>
+      <div class="info-item">(신차 리스 출고 시) 신차 리스계약서</div>
+      <div class="info-item">(구차 리스 매각 시) 구차 리스 해지확인서</div>
+      <div class="info-item">(리스 승계 시) 구차 보험가입증명서</div>
+      <div class="info-item">(공동명의 시) 가족관계증명서</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">차량 대금 / 지원금</div>
+      <div class="info-item">차량 대금: 차량 보내주신 다음 날 오후 3~4시 입금 예정</div>
+      <div class="info-item">트레이드인 지원금: 신차 출고일 다다음달 15일 지급</div>
+      <div class="info-note">예) 신차 5월 출고 → 7월 15일 트레이드인 지원금 지급</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 지정 반납 안내 ===== -->
+<div id="screen-handover" class="screen">
+  <div class="info-header">
+    <div class="info-header-top">
+      <span class="info-header-back" onclick="showScreen('screen-home')">← 뒤로</span>
+    </div>
+    <div class="info-header-title">지정 반납 안내</div>
+  </div>
+  <div class="info-body">
+    <div class="info-section">
+      <div class="info-step">
+        <div class="info-step-num">STEP 1</div>
+        <div class="info-step-text">고객님께서 <strong>BMW 파이낸셜 고객센터(1577-5822)</strong>에 전화하셔서 <strong>도이치모터스 장용준 주임(010-3384-3507)</strong>에게 지정반납을 요청해주셔야 합니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 2</div>
+        <div class="info-step-text"><strong>위임설정(전체 권한)</strong>을 <strong>도이치모터스 장용준 주임</strong>에게 설정해주시면 됩니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 3 — 준비 서류</div>
+        <div class="info-step-text" style="margin-top:8px">
+          <div class="info-item">자동차등록증</div>
+          <div class="info-item">개인: 본인서명사실확인서</div>
+          <div class="info-item">개인사업자: 본인서명사실확인서, 사업자등록증</div>
+          <div class="info-item">법인사업자: 법인 인감증명서, 사업자등록증</div>
+          <div class="info-item">차량용품: 차량키, 매뉴얼북, 충전케이블 등 차량 물품</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DIAGNOSIS ===== -->
 <div id="screen-diagnosis" class="screen">
   <div id="diag-header" class="app-header bmw">
     <div class="header-top">
-      <span class="header-brand" id="diag-brand-label">BMW TRADE-IN</span>
-      <span class="header-back" onclick="goBack()">← 처음으로</span>
+      <span class="header-brand" id="diag-brand-label">BMW TRADE-IN / RIDE AGAIN</span>
+      <div class="header-nav">
+        <span class="header-back-q" id="btn-prev" onclick="prevStep()">← 이전</span>
+        <span class="header-home" onclick="goHome()">홈</span>
+      </div>
     </div>
     <div class="header-title" id="diag-header-title">트레이드인 진단</div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     <div class="progress-text" id="progress-text">1 / 5</div>
   </div>
   <div class="app-body">
@@ -291,17 +316,16 @@
   </div>
 </div>
 
-<!-- ===== RESULT SCREEN ===== -->
+<!-- ===== RESULT ===== -->
 <div id="screen-result" class="screen">
   <div id="result-header" class="app-header bmw">
     <div class="header-top">
-      <span class="header-brand" id="result-brand-label">BMW TRADE-IN</span>
-      <span class="header-back" onclick="goBack()">← 처음으로</span>
+      <span class="header-brand" id="result-brand-label">BMW TRADE-IN / RIDE AGAIN</span>
+      <span class="header-home" onclick="goHome()">홈</span>
     </div>
     <div class="header-title">진단 결과</div>
   </div>
-  <div class="app-body" id="result-body">
-  </div>
+  <div class="app-body" id="result-body"></div>
 </div>
 
 <script>
@@ -310,9 +334,8 @@ let currentBrand = 'bmw';
 let answers = {};
 let flowIndex = 0;
 
-// ===== ALL QUESTIONS DEFINITION =====
-const allQuestions = {
-  // Q1
+// ===== ALL QUESTIONS =====
+const Q = {
   purpose: {
     text: '무엇이 필요하신가요?',
     hint: '',
@@ -321,224 +344,177 @@ const allQuestions = {
       { value: 'quote', label: '트레이드인 차량 견적 확인' }
     ]
   },
-  // Q2
   ownership_same: {
     text: '구차와 신차의 명의가 동일한가요?',
-    hint: '구차(현재 보유 차량)와 구매할 신차의 명의를 비교합니다.',
+    hint: '구차(현재 보유 차량)와 구매할 BMW 신차의 명의를 비교합니다.',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q3
   ownership_type: {
     text: '구차 혹은 신차의 명의가 어떤 형태인가요?',
     hint: 'ex) 구차 명의 → 신차 명의',
     options: [
-      { value: 'ok_personal_joint', label: '개인 → 공동명의' },
-      { value: 'ok_biz_rep', label: '개인사업자 대표 → 개인사업자 대표자로 등록된 법인' },
-      { value: 'ok_corp', label: '법인 → 법인사업자 대표' },
-      { value: 'ok_joint_single', label: '공동명의 A+B → 개인명의 A or 개인명의 B' },
+      { value: 'ok', label: '개인 A → 개인 A + 가족' },
+      { value: 'ok2', label: '개인사업자 대표 → 개인사업자 대표자로 등록된 법인' },
+      { value: 'ok3', label: '법인 → 법인 or 법인 대표자 or 법인 대표자 + 가족' },
+      { value: 'ok4', label: '공동명의 A+B → 개인명의 A or 개인명의 B' },
       { value: 'other', label: '기타' }
     ]
   },
-  // Q4
   car_brand: {
     text: '구차의 브랜드는 무엇인가요?',
     hint: '',
     options: [
-      { value: 'bmw', label: 'BMW', sub: '→ Ride Again 프로모션' },
-      { value: 'strategic', label: '전략차종', sub: 'MB(S-Class, CLS, EQS, G-Wagon, GLS), Audi(A8, Q8), Genesis(G90, EQ900)' },
+      { value: 'bmw', label: 'BMW / MINI', sub: '→ Trade-in 또는 Ride Again' },
+      { value: 'strategic', label: '전략차종', sub: 'MB(S-Class·CLS·EQS·G-Wagen·GLS), Audi(A8·Q8), Genesis(G90·EQ900)' },
       { value: 'premium', label: '프리미엄 브랜드', sub: 'MB, Audi, MINI, Porsche, Genesis' },
       { value: 'ev', label: '전기차 브랜드', sub: 'Tesla 전 차종' },
       { value: 'other', label: '그 외 브랜드' }
     ]
   },
-  // Q5 BMW 구매방법
   bmw_purchase_type: {
-    text: 'BMW 구차 구매 방법은 무엇인가요?',
+    text: 'BMW/MINI 구차를 어떻게 구매하셨나요?',
     hint: '',
     options: [
       { value: 'new', label: '신차 구매' },
-      { value: 'used', label: '중고 구매' }
+      { value: 'used', label: '중고 구매' },
+      { value: 'consign', label: '위탁판매 차량' },
+      { value: 'rental_done', label: '렌터카 이용 후 일반 개인/법인으로 이전한 상태' },
+      { value: 'rental_now', label: '현재 렌터카 이용 중' }
     ]
   },
-  // Q6 BMW 신차구매 60일
-  bmw_new_60: {
+  bmw_reg7: {
+    text: 'BMW/MINI 구차의 최초 등록일이 7년 이내인가요?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내\n※ 신차구매 + 7년 초과 → Ride Again / 중고구매 + 7년 초과 → 불가',
+    options: [
+      { value: 'yes', label: 'YES — 7년 이내 (2019년 이후 등록)' },
+      { value: 'no', label: 'NO — 7년 초과 (2018년 이전 등록)' }
+    ]
+  },
+  bmw_60: {
     text: '구차 보유 기간이 60일 이상인가요?',
-    hint: '구차 반납일 기준 · BPS 명의 등록일 또는 리스 승계일',
+    hint: 'BPS 반납 예정일 기준',
     options: [
-      { value: 'yes', label: 'YES' },
-      { value: 'no', label: 'NO' }
+      { value: 'yes', label: 'YES — 60일 이상' },
+      { value: 'no', label: 'NO — 60일 미만' }
     ]
   },
-  // Q7 BMW 중고구매 최초등록 7년
-  bmw_used_reg7: {
-    text: 'BMW 구차의 최초 등록일은 7년 이내인가요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
-    options: [
-      { value: 'yes', label: 'YES' },
-      { value: 'no', label: 'NO' }
-    ]
-  },
-  // Q8 BMW 중고구매 180일
   bmw_used_180: {
-    text: 'BMW 구차의 보유 기간은 180일 이상인가요?',
-    hint: '',
+    text: '구차 보유 기간이 180일 이상인가요?',
+    hint: 'BPS 반납 예정일 기준',
     options: [
-      { value: 'yes', label: 'YES' },
-      { value: 'no', label: 'NO' }
+      { value: 'yes', label: 'YES — 180일 이상' },
+      { value: 'no', label: 'NO — 180일 미만' }
     ]
   },
-  // Q9 전략차종 7시리즈 여부
+  // 전략차종
   strategic_7series: {
-    text: 'BMW 신차를 7시리즈로 구매하시나요?',
+    text: '구매하실 BMW 신차가 7시리즈인가요?',
     hint: '전략차종 구매 시 7시리즈 여부에 따라 지원금이 달라집니다.',
     options: [
       { value: 'yes', label: 'YES — 7시리즈 구매' },
-      { value: 'no', label: 'NO — 그 외 모델 구매' }
+      { value: 'no', label: 'NO — 그 외 모델' }
     ]
   },
-  // Q10 전략+7시리즈 구매방법/연식
-  strategic_7s_condition: {
-    text: '전략차종 구차의 구매 방법과 최초등록일은 어떤 조건에 해당하시나요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
+  strategic_condition: {
+    text: '전략차종 구차의 구매 방법과 최초등록일은?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
-      { value: 'ok_new10', label: '구차를 신차로 구매하고, 최초등록일 기준 10년 이내' },
-      { value: 'ok_used7', label: '구차를 중고차로 구매하고, 최초등록일 기준 7년 이내' },
+      { value: 'ok_new10', label: '신차 구매 + 최초등록일 기준 10년 이내' },
+      { value: 'ok_used7', label: '중고 구매 + 최초등록일 기준 7년 이내' },
       { value: 'none', label: '해당 사항 없음' }
     ]
   },
-  // Q11 전략+7시리즈 180일
-  strategic_7s_180: {
-    text: '(전략차종) 구차 보유 기간은 180일 이상인가요?',
+  strategic_180: {
+    text: '구차 보유 기간이 180일 이상인가요?',
     hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q12 전략차종 최초등록 7년 (7시리즈 외)
   strategic_reg7: {
-    text: '(전략차종) 구차의 최초 등록일이 7년 이내인가요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
+    text: '전략차종 구차의 최초 등록일이 7년 이내인가요?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q13 전략차종 7시리즈 외 180일
   strategic_other_180: {
-    text: '(전략차종) 구차 보유 기간은 180일 이상인가요?',
+    text: '구차 보유 기간이 180일 이상인가요?',
     hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q14 프리미엄 7시리즈 여부
+  // 프리미엄
   premium_7series: {
-    text: 'BMW 신차를 7시리즈로 구매하시나요?',
+    text: '구매하실 BMW 신차가 7시리즈인가요?',
     hint: '프리미엄 브랜드 구차의 경우 7시리즈 여부에 따라 지원금이 달라집니다.',
     options: [
       { value: 'yes', label: 'YES — 7시리즈 구매' },
-      { value: 'no', label: 'NO — 그 외 모델 구매' }
+      { value: 'no', label: 'NO — 그 외 모델' }
     ]
   },
-  // Q15 프리미엄+7시리즈 구매방법/연식
   premium_7s_condition: {
-    text: '프리미엄 브랜드) 구차의 구매 방법과 최초등록일은 어떤 조건에 해당하시나요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
+    text: '프리미엄 브랜드 구차의 구매 방법과 최초등록일은?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
-      { value: 'ok_new10', label: '구차를 신차로 구매하고, 최초등록일 기준 10년 이내' },
-      { value: 'ok_used7', label: '구차를 중고차로 구매하고, 최초등록일 기준 7년 이내' },
+      { value: 'ok_new10', label: '신차 구매 + 최초등록일 기준 10년 이내' },
+      { value: 'ok_used7', label: '중고 구매 + 최초등록일 기준 7년 이내' },
       { value: 'none', label: '해당 사항 없음' }
     ]
   },
-  // Q16 프리미엄+7시리즈 180일
   premium_7s_180: {
-    text: '(프리미엄 브랜드) 구차 보유 기간은 180일 이상인가요?',
+    text: '구차 보유 기간이 180일 이상인가요?',
     hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q17 프리미엄 7시리즈 외 최초등록 7년
   premium_reg7: {
-    text: '(프리미엄 브랜드) 구차 최초 등록일 기준 7년 이내인가요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
+    text: '프리미엄 브랜드 구차의 최초 등록일이 7년 이내인가요?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q18 프리미엄 7시리즈 외 180일
   premium_other_180: {
-    text: '(프리미엄 브랜드) 구차 보유 기간은 180일 이상인가요?',
+    text: '구차 보유 기간이 180일 이상인가요?',
     hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
   },
-  // Q19 전기차 7시리즈 여부
-  ev_7series: {
-    text: 'BMW 신차를 7시리즈로 구매하시나요?',
-    hint: '전기차 브랜드 구차의 경우 7시리즈 여부에 따라 지원금이 달라집니다.',
+  // 전기차
+  ev_condition: {
+    text: '전기차 구차의 구매 방법과 최초등록일은?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
-      { value: 'yes', label: 'YES — 7시리즈 구매' },
-      { value: 'no', label: 'NO — 그 외 모델 구매' }
-    ]
-  },
-  // Q20 전기차+7시리즈 구매방법/연식
-  ev_7s_condition: {
-    text: '(전기차 브랜드) 구차의 구매 방법과 최초등록일은 어떤 조건에 해당하시나요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
-    options: [
-      { value: 'ok_new10', label: '구차를 신차로 구매하고, 최초등록일 기준 10년 이내' },
-      { value: 'ok_used7', label: '구차를 중고차로 구매하고, 최초등록일 기준 7년 이내' },
+      { value: 'ok_new10', label: '신차 구매 + 최초등록일 기준 10년 이내' },
+      { value: 'ok_used7', label: '중고 구매 + 최초등록일 기준 7년 이내' },
       { value: 'none', label: '해당 사항 없음' }
     ]
   },
-  // Q21 전기차+7시리즈 180일
-  ev_7s_180: {
-    text: '(전기차 브랜드) 구차 보유 기간은 180일 이상인가요?',
+  ev_180: {
+    text: '구차 보유 기간이 180일 이상인가요?',
     hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
     ]
-  },
-  // Q22 전기차 7시리즈 외 최초등록 7년
-  ev_reg7: {
-    text: '(전기차) 구차 최초 등록일 기준 7년 이내인가요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
-    options: [
-      { value: 'yes', label: 'YES' },
-      { value: 'no', label: 'NO' }
-    ]
-  },
-  // Q23 전기차 7시리즈 외 180일
-  ev_other_180: {
-    text: '(전기차 브랜드) 구차 보유 기간은 180일 이상인가요?',
-    hint: '',
-    options: [
-      { value: 'yes', label: 'YES' },
-      { value: 'no', label: 'NO' }
-    ]
-  },
-  // Q29 차량 견적 문의 (입력)
-  quote_model: {
-    text: '차종을 알려주세요!',
-    hint: 'ex) 벤츠 GLC, BMW 740i (브랜드 + 차종)',
-    options: null, // 텍스트 입력
-    isText: true
   },
   // MINI
   mini_ownership_same: {
     text: '구차와 신차(MINI)의 명의가 동일한가요?',
-    hint: '기존 보유 차량과 구매할 MINI 신차의 명의를 비교합니다.',
+    hint: '',
     options: [
       { value: 'yes', label: 'YES' },
       { value: 'no', label: 'NO' }
@@ -548,10 +524,10 @@ const allQuestions = {
     text: '구차 혹은 신차의 명의가 어떤 형태인가요?',
     hint: 'ex) 구차 명의 → 신차 명의',
     options: [
-      { value: 'ok_personal_joint', label: '개인 → 공동명의' },
-      { value: 'ok_biz_rep', label: '개인사업자 대표 → 개인사업자 대표자로 등록된 법인' },
-      { value: 'ok_corp', label: '법인 → 법인사업자 대표' },
-      { value: 'ok_joint_single', label: '공동명의 A+B → 개인명의 A or 개인명의 B' },
+      { value: 'ok', label: '개인 A → 개인 A + 가족' },
+      { value: 'ok2', label: '개인사업자 대표 → 개인사업자 대표자로 등록된 법인' },
+      { value: 'ok3', label: '법인 → 법인 or 법인 대표자 or 법인 대표자 + 가족' },
+      { value: 'ok4', label: '공동명의 A+B → 개인명의 A or 개인명의 B' },
       { value: 'other', label: '기타' }
     ]
   },
@@ -573,7 +549,7 @@ const allQuestions = {
   },
   mini_reg7: {
     text: '구차 최초등록일이 7년 이내인가요?',
-    hint: '연단위로 계산 / 2019년 구차 최초등록한 경우 2026년까지 7년 이내로 계산',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내',
     options: [
       { value: 'yes', label: 'YES — 7년 이내 (2019년 이후 등록)' },
       { value: 'no', label: 'NO — 7년 초과 (2018년 이전 등록)' }
@@ -581,407 +557,253 @@ const allQuestions = {
   }
 };
 
-// ===== FLOW BUILDER =====
-// 각 단계에서 다음에 보여줄 질문 ID를 순서대로 반환
-// 결과에 도달하면 특수값 반환: 'result_3', 'result_2', 'result_1', 'result_confirm', 'result_impossible', 'quote'
+const RESULT_CODES = ['__r3__','__r2__','__r1__','__ride__','__confirm__','__impossible__','__quote__'];
 
+// ===== BMW FLOW =====
 function buildBmwFlow() {
   const a = answers;
-  const flow = [];
+  const f = [];
 
-  // Q1
-  flow.push('purpose');
-  if (!a.purpose) return flow;
-  if (a.purpose === 'quote') { flow.push('__quote__'); return flow; }
+  f.push('purpose');
+  if (!a.purpose) return f;
+  if (a.purpose === 'quote') { f.push('__quote__'); return f; }
 
-  // Q2
-  flow.push('ownership_same');
-  if (!a.ownership_same) return flow;
-
+  f.push('ownership_same');
+  if (!a.ownership_same) return f;
   if (a.ownership_same === 'no') {
-    // Q3
-    flow.push('ownership_type');
-    if (!a.ownership_type) return flow;
-    if (a.ownership_type === 'other') { flow.push('__confirm__'); return flow; }
-    // ok → Q4
+    f.push('ownership_type');
+    if (!a.ownership_type) return f;
+    if (a.ownership_type === 'other') { f.push('__confirm__'); return f; }
   }
 
-  // Q4
-  flow.push('car_brand');
-  if (!a.car_brand) return flow;
-  if (a.car_brand === 'other') { flow.push('__impossible__'); return flow; }
+  f.push('car_brand');
+  if (!a.car_brand) return f;
+  if (a.car_brand === 'other') { f.push('__impossible__'); return f; }
 
-  // BMW (Ride Again)
+  // BMW/MINI 구차
   if (a.car_brand === 'bmw') {
-    flow.push('bmw_purchase_type');
-    if (!a.bmw_purchase_type) return flow;
+    f.push('bmw_purchase_type');
+    if (!a.bmw_purchase_type) return f;
+    if (a.bmw_purchase_type === 'consign') { f.push('__impossible__'); return f; }
+    if (a.bmw_purchase_type === 'rental_now') { f.push('__impossible__'); return f; }
+
+    // 신차구매 / 중고구매 / 렌터카이전 → 최초등록 7년 확인
+    f.push('bmw_reg7');
+    if (!a.bmw_reg7) return f;
 
     if (a.bmw_purchase_type === 'new') {
-      // Q6
-      flow.push('bmw_new_60');
-      if (!a.bmw_new_60) return flow;
-      if (a.bmw_new_60 === 'yes') { flow.push('__result_3__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      if (a.bmw_reg7 === 'yes') {
+        // 신차+7년이내 → Trade-in / 60일 확인
+        f.push('bmw_60');
+        if (!a.bmw_60) return f;
+        if (a.bmw_60 === 'yes') { f.push('__r3__'); return f; }
+        f.push('__impossible__'); return f;
+      } else {
+        // 신차+7년초과 → Ride Again / 60일 확인
+        f.push('bmw_60');
+        if (!a.bmw_60) return f;
+        if (a.bmw_60 === 'yes') { f.push('__ride__'); return f; }
+        f.push('__impossible__'); return f;
+      }
     } else {
-      // 중고
-      // Q7
-      flow.push('bmw_used_reg7');
-      if (!a.bmw_used_reg7) return flow;
-      if (a.bmw_used_reg7 === 'no') { flow.push('__impossible__'); return flow; }
-      // Q8
-      flow.push('bmw_used_180');
-      if (!a.bmw_used_180) return flow;
-      if (a.bmw_used_180 === 'yes') { flow.push('__result_3__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      // 중고구매 or 렌터카이전 → 7년초과면 불가
+      if (a.bmw_reg7 === 'no') { f.push('__impossible__'); return f; }
+      // 7년이내 → 180일 확인
+      f.push('bmw_used_180');
+      if (!a.bmw_used_180) return f;
+      if (a.bmw_used_180 === 'yes') { f.push('__r3__'); return f; }
+      f.push('__impossible__'); return f;
     }
   }
 
   // 전략차종
   if (a.car_brand === 'strategic') {
-    // Q9
-    flow.push('strategic_7series');
-    if (!a.strategic_7series) return flow;
-
+    f.push('strategic_7series');
+    if (!a.strategic_7series) return f;
     if (a.strategic_7series === 'yes') {
-      // Q10
-      flow.push('strategic_7s_condition');
-      if (!a.strategic_7s_condition) return flow;
-      if (a.strategic_7s_condition === 'none') { flow.push('__impossible__'); return flow; }
-      // Q11
-      flow.push('strategic_7s_180');
-      if (!a.strategic_7s_180) return flow;
-      if (a.strategic_7s_180 === 'yes') { flow.push('__result_3__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      f.push('strategic_condition');
+      if (!a.strategic_condition) return f;
+      if (a.strategic_condition === 'none') { f.push('__impossible__'); return f; }
+      f.push('strategic_180');
+      if (!a.strategic_180) return f;
+      if (a.strategic_180 === 'yes') { f.push('__r3__'); return f; }
+      f.push('__impossible__'); return f;
     } else {
-      // 7시리즈 외
-      // Q12
-      flow.push('strategic_reg7');
-      if (!a.strategic_reg7) return flow;
-      if (a.strategic_reg7 === 'no') { flow.push('__impossible__'); return flow; }
-      // Q13
-      flow.push('strategic_other_180');
-      if (!a.strategic_other_180) return flow;
-      if (a.strategic_other_180 === 'yes') { flow.push('__result_2__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      f.push('strategic_reg7');
+      if (!a.strategic_reg7) return f;
+      if (a.strategic_reg7 === 'no') { f.push('__impossible__'); return f; }
+      f.push('strategic_other_180');
+      if (!a.strategic_other_180) return f;
+      if (a.strategic_other_180 === 'yes') { f.push('__r1__'); return f; }
+      f.push('__impossible__'); return f;
     }
   }
 
   // 프리미엄 브랜드
   if (a.car_brand === 'premium') {
-    // Q14
-    flow.push('premium_7series');
-    if (!a.premium_7series) return flow;
-
+    f.push('premium_7series');
+    if (!a.premium_7series) return f;
     if (a.premium_7series === 'yes') {
-      // Q15
-      flow.push('premium_7s_condition');
-      if (!a.premium_7s_condition) return flow;
-      if (a.premium_7s_condition === 'none') { flow.push('__impossible__'); return flow; }
-      // Q16
-      flow.push('premium_7s_180');
-      if (!a.premium_7s_180) return flow;
-      if (a.premium_7s_180 === 'yes') { flow.push('__result_2__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      f.push('premium_7s_condition');
+      if (!a.premium_7s_condition) return f;
+      if (a.premium_7s_condition === 'none') { f.push('__impossible__'); return f; }
+      f.push('premium_7s_180');
+      if (!a.premium_7s_180) return f;
+      if (a.premium_7s_180 === 'yes') { f.push('__r2__'); return f; }
+      f.push('__impossible__'); return f;
     } else {
-      // 7시리즈 외
-      // Q17
-      flow.push('premium_reg7');
-      if (!a.premium_reg7) return flow;
-      if (a.premium_reg7 === 'no') { flow.push('__impossible__'); return flow; }
-      // Q18
-      flow.push('premium_other_180');
-      if (!a.premium_other_180) return flow;
-      if (a.premium_other_180 === 'yes') { flow.push('__result_1__'); return flow; }
-      flow.push('__impossible__'); return flow;
+      f.push('premium_reg7');
+      if (!a.premium_reg7) return f;
+      if (a.premium_reg7 === 'no') { f.push('__impossible__'); return f; }
+      f.push('premium_other_180');
+      if (!a.premium_other_180) return f;
+      if (a.premium_other_180 === 'yes') { f.push('__r1__'); return f; }
+      f.push('__impossible__'); return f;
     }
   }
 
-  // 전기차
+  // 전기차 — 7시리즈 여부 묻지 않고 1%
   if (a.car_brand === 'ev') {
-    // Q19
-    flow.push('ev_7series');
-    if (!a.ev_7series) return flow;
-
-    if (a.ev_7series === 'yes') {
-      // Q20
-      flow.push('ev_7s_condition');
-      if (!a.ev_7s_condition) return flow;
-      if (a.ev_7s_condition === 'none') { flow.push('__impossible__'); return flow; }
-      // Q21
-      flow.push('ev_7s_180');
-      if (!a.ev_7s_180) return flow;
-      if (a.ev_7s_180 === 'yes') { flow.push('__result_2__'); return flow; }
-      flow.push('__impossible__'); return flow;
-    } else {
-      // 7시리즈 외
-      // Q22
-      flow.push('ev_reg7');
-      if (!a.ev_reg7) return flow;
-      if (a.ev_reg7 === 'no') { flow.push('__impossible__'); return flow; }
-      // Q23
-      flow.push('ev_other_180');
-      if (!a.ev_other_180) return flow;
-      if (a.ev_other_180 === 'yes') { flow.push('__result_1__'); return flow; }
-      flow.push('__impossible__'); return flow;
-    }
+    f.push('ev_condition');
+    if (!a.ev_condition) return f;
+    if (a.ev_condition === 'none') { f.push('__impossible__'); return f; }
+    f.push('ev_180');
+    if (!a.ev_180) return f;
+    if (a.ev_180 === 'yes') { f.push('__r1__'); return f; }
+    f.push('__impossible__'); return f;
   }
 
-  return flow;
+  return f;
 }
 
+// ===== MINI FLOW =====
 function buildMiniFlow() {
   const a = answers;
-  const flow = [];
+  const f = [];
 
-  // Q1
-  flow.push('purpose');
-  if (!a.purpose) return flow;
-  if (a.purpose === 'quote') { flow.push('__quote__'); return flow; }
+  f.push('purpose');
+  if (!a.purpose) return f;
+  if (a.purpose === 'quote') { f.push('__quote__'); return f; }
 
-  // Q2
-  flow.push('mini_ownership_same');
-  if (!a.mini_ownership_same) return flow;
-
+  f.push('mini_ownership_same');
+  if (!a.mini_ownership_same) return f;
   if (a.mini_ownership_same === 'no') {
-    // Q3
-    flow.push('mini_ownership_type');
-    if (!a.mini_ownership_type) return flow;
-    if (a.mini_ownership_type === 'other') { flow.push('__confirm__'); return flow; }
+    f.push('mini_ownership_type');
+    if (!a.mini_ownership_type) return f;
+    if (a.mini_ownership_type === 'other') { f.push('__confirm__'); return f; }
   }
 
-  // Q4 구차가 MINI/BMW?
-  flow.push('mini_car_brand');
-  if (!a.mini_car_brand) return flow;
-  if (a.mini_car_brand === 'no') { flow.push('__impossible__'); return flow; }
+  f.push('mini_car_brand');
+  if (!a.mini_car_brand) return f;
+  if (a.mini_car_brand === 'no') { f.push('__impossible__'); return f; }
 
-  // Q5 신차 구매 여부
-  flow.push('mini_purchase_type');
-  if (!a.mini_purchase_type) return flow;
+  f.push('mini_purchase_type');
+  if (!a.mini_purchase_type) return f;
+  if (a.mini_purchase_type === 'yes') { f.push('__r2__'); return f; }
 
-  if (a.mini_purchase_type === 'yes') {
-    // 신차구매 → 바로 2% 가능
-    flow.push('__result_2__'); return flow;
-  }
-
-  // Q6 중고구매 → 최초등록 7년 이내?
-  flow.push('mini_reg7');
-  if (!a.mini_reg7) return flow;
-  if (a.mini_reg7 === 'yes') { flow.push('__result_2__'); return flow; }
-  flow.push('__impossible__'); return flow;
+  f.push('mini_reg7');
+  if (!a.mini_reg7) return f;
+  if (a.mini_reg7 === 'yes') { f.push('__r2__'); return f; }
+  f.push('__impossible__'); return f;
 }
+
+function getFlow() { return currentBrand === 'bmw' ? buildBmwFlow() : buildMiniFlow(); }
 
 // ===== RESULT =====
-const RESULT_CODES = ['__result_3__', '__result_2__', '__result_1__', '__confirm__', '__impossible__', '__quote__'];
-
-function getResultFromFlow(flow) {
-  const last = flow[flow.length - 1];
-  if (RESULT_CODES.includes(last)) return last;
-  return null;
-}
-
 function calcResult() {
-  const flow = currentBrand === 'bmw' ? buildBmwFlow() : buildMiniFlow();
+  const flow = getFlow();
   const last = flow[flow.length - 1];
-  const brand = currentBrand === 'bmw' ? answers.car_brand : answers.mini_car_brand;
-
-  if (last === '__result_3__') {
-    const promo = (currentBrand === 'bmw' && brand === 'bmw') ? 'Ride Again' : 'Trade-in';
-    const note = (currentBrand === 'bmw' && brand === 'bmw')
-      ? '7년 이내 Trade-in / 7년 초과 Ride Again\nex) 2018년 최초등록차량 2026년 구차매각 → Trade-in / 2017년 최초등록차량 2026년 구차매각 → Ride Again'
-      : currentBrand === 'mini' ? 'MINI/BMW 구차 · MINI 신차' : '전략차종 → 7시리즈 구매';
-    return { possible: true, promo, percent: 3, note };
-  }
-  if (last === '__result_2__') {
-    const promo = currentBrand === 'mini' ? 'MINI Next' : 'Trade-in';
-    return { possible: true, promo, percent: 2, note: '' };
-  }
-  if (last === '__result_1__') {
-    return { possible: true, promo: 'Trade-in', percent: 1, note: '' };
-  }
-  if (last === '__confirm__') {
-    return { possible: null, reason: '명의와 관련하여 좀 더 정확한 확인이 필요합니다.\n아래 연락처로 연락 부탁드립니다.' };
-  }
-  if (last === '__impossible__') {
-    return { possible: false, reason: '트레이드인이 불가능합니다.\n추가로 궁금하신 사항은 아래 연락처로 연락 부탁드립니다.' };
-  }
-  if (last === '__quote__') {
-    return { possible: 'quote' };
-  }
-  return { possible: false, reason: '조건을 확인할 수 없습니다.' };
+  if (last === '__r3__') return { type: 'possible', promo: 'Trade-in', percent: 3 };
+  if (last === '__ride__') return { type: 'possible', promo: 'Ride Again', percent: 3 };
+  if (last === '__r2__') return { type: 'possible', promo: currentBrand === 'mini' ? 'MINI Next' : 'Trade-in', percent: 2 };
+  if (last === '__r1__') return { type: 'possible', promo: 'Trade-in', percent: 1 };
+  if (last === '__confirm__') return { type: 'confirm' };
+  if (last === '__quote__') return { type: 'quote' };
+  return { type: 'impossible' };
 }
 
-// ===== DOCUMENT DATA =====
+// ===== DOC DATA =====
 const docData = {
   lease_personal_biz: {
     title: '리스 / 개인사업자',
     sections: [
-      {
-        title: '매입 관련 서류',
-        items: [
-          '위임설정 — BMW파이낸셜 고객센터 1577-5822 (상담원 연결 후 위임설정 요청)',
-          '위임자: 도이치모터스 BPS 가양지점 장용준 주임 (010-3384-3507)',
-          '본인서명사실확인서 1부 (용도에 리스사제출용 기입)',
-          '사업자등록증',
-          '자동차등록증',
-          '차량 키 전부 + 매뉴얼북(사용자 설명서)',
-          '통장사본'
-        ],
-        note: '차량 보내주실 때 차에 함께 넣어서 보내주시면 됩니다. 통장사본·사업자등록증은 이미지로 보내주셔도 됩니다.'
-      },
-      {
-        title: '탁송 정보',
-        items: ['탁송 출발지 주소', '탁송 출발 시간']
-      },
-      {
-        title: '고객 등록 정보',
-        items: ['휴대전화 번호', '통신사', '이메일 주소']
-      },
-      {
-        title: '트레이드인 관련 서류',
-        items: ['신차 자동차등록증', '신차 MSRP']
-      },
-      {
-        title: '차량 대금 / 지원금',
-        items: [
-          '차량 대금: 차량 보내주신 다음 날 오후 3~4시 입금 예정',
-          '트레이드인 지원금: 신차 출고일 다다음달 15일 지급'
-        ],
-        note: '예) 신차 5월 출고 시 → 7월 15일 트레이드인 지원금 지급'
-      }
+      { title: '매입 관련 서류', items: ['위임설정 — BMW파이낸셜 1577-5822 (도이치모터스 BPS 가양지점 장용준 주임 010-3384-3507)', '본인서명사실확인서 1부 (용도: 리스사제출용)', '사업자등록증', '자동차등록증', '차량 키 전부 + 매뉴얼북', '통장사본'], note: '통장사본·사업자등록증은 이미지 가능. 차량 발송 시 차 안에 함께 넣어주세요.' },
+      { title: '고객 등록 정보', items: ['휴대전화 번호', '통신사', '이메일 주소'] },
+      { title: '트레이드인 서류', items: ['신차 자동차등록증', '신차 MSRP'] },
+      { title: '차량 대금 / 지원금', items: ['차량 대금: 다음 날 오후 3~4시 입금', '지원금: 신차 출고 다다음달 15일 지급'], note: '예) 5월 출고 → 7월 15일 지급' }
     ]
   },
   lease_personal: {
     title: '리스 / 개인',
     sections: [
-      {
-        title: '매입 관련 서류',
-        items: [
-          '위임설정 — BMW파이낸셜 고객센터 1577-5822',
-          '위임자: 도이치모터스 BPS 가양지점 장용준 주임 (010-3384-3507)',
-          '본인서명사실확인서 1부 (용도에 리스사제출용 기입)',
-          '자동차등록증',
-          '차량 키 전부 + 매뉴얼북',
-          '통장사본'
-        ],
-        note: '통장사본은 이미지로 보내주셔도 됩니다.'
-      },
-      {
-        title: '탁송 정보',
-        items: ['탁송 출발지 주소', '탁송 출발 시간']
-      },
-      {
-        title: '고객 등록 정보',
-        items: ['휴대전화 번호', '통신사', '이메일 주소']
-      },
-      {
-        title: '트레이드인 관련 서류',
-        items: ['신차 자동차등록증', '신차 MSRP']
-      },
-      {
-        title: '차량 대금 / 지원금',
-        items: [
-          '차량 대금: 차량 보내주신 다음 날 오후 3~4시 입금 예정',
-          '트레이드인 지원금: 신차 출고일 다다음달 15일 지급'
-        ],
-        note: '예) 신차 5월 출고 시 → 7월 15일 트레이드인 지원금 지급'
-      }
+      { title: '매입 관련 서류', items: ['위임설정 — BMW파이낸셜 1577-5822 (도이치모터스 BPS 가양지점 장용준 주임 010-3384-3507)', '본인서명사실확인서 1부 (용도: 리스사제출용)', '자동차등록증', '차량 키 전부 + 매뉴얼북', '통장사본'], note: '통장사본은 이미지 가능.' },
+      { title: '고객 등록 정보', items: ['휴대전화 번호', '통신사', '이메일 주소'] },
+      { title: '트레이드인 서류', items: ['신차 자동차등록증', '신차 MSRP'] },
+      { title: '차량 대금 / 지원금', items: ['차량 대금: 다음 날 오후 3~4시 입금', '지원금: 신차 출고 다다음달 15일 지급'], note: '예) 5월 출고 → 7월 15일 지급' }
     ]
   },
   cash_corporate: {
     title: '현금 / 법인',
     sections: [
-      {
-        title: '매입 관련 서류',
-        items: [
-          '자동차매도용인감증명서',
-          '통장사본',
-          '법인사업자등록증',
-          '법인등기사항증명서 (말소사항 포함)',
-          '전자세금계산서 영수증'
-        ],
-        note: '매도용인감증명서: 법인명 도이치모터스(주) / 법인번호 194211-0042721 / 소재지 서울특별시 강서구 양천로53길 30, 103호(가양동)'
-      },
-      {
-        title: '세금계산서 발행 정보',
-        items: [
-          '사업자등록번호: 109-85-41907',
-          '상호: 도이치모터스 주식회사 강서 프리미엄 셀렉션',
-          '대표자: 권혁민',
-          '업태: 소매업 / 종목: 자동차·중고자동차판매',
-          '이메일: CDEUTSCH610@hometax.go.kr / bmw_steady@naver.com'
-        ]
-      },
-      {
-        title: '자동차 관련 물품 및 서류',
-        items: ['자동차등록증', '차량 매뉴얼', '차량키 전부', '기타 기본 제공 물품']
-      },
-      {
-        title: '고객 등록 정보',
-        items: ['대표자 휴대전화 번호', '대표자 생년월일', '대표자 통신사', '법인 이메일 주소']
-      },
-      {
-        title: '트레이드인 관련 서류',
-        items: [
-          '신차 자동차등록증', '신차 MSRP',
-          '(신차 리스 출고 시) 신차 리스계약서',
-          '(구차 리스 상태 매각 시) 구차 리스 해지확인서',
-          '(리스 구매 후 승계 시) 구차 보험가입증명서',
-          '(구차 개인 → 신차 공동명의 시) 가족관계증명서'
-        ]
-      }
+      { title: '매입 관련 서류', items: ['자동차매도용인감증명서', '통장사본', '법인사업자등록증', '법인등기사항증명서 (말소사항 포함)', '전자세금계산서 영수증', '자동차등록증 · 차량 매뉴얼 · 차량키 전부'], note: '매도용인감: 법인명 도이치모터스(주) / 법인번호 194211-0042721 / 소재지 서울 강서구 양천로53길 30, 103호' },
+      { title: '고객 등록 정보', items: ['대표자 휴대전화', '대표자 생년월일', '대표자 통신사', '법인 이메일'] },
+      { title: '트레이드인 서류', items: ['신차 자동차등록증', '신차 MSRP', '(리스 출고 시) 신차 리스계약서', '(구차 리스 매각 시) 구차 리스 해지확인서', '(리스 승계 시) 구차 보험가입증명서', '(공동명의 시) 가족관계증명서'] },
+      { title: '차량 대금 / 지원금', items: ['차량 대금: 다음 날 오후 3~4시 입금', '지원금: 신차 출고 다다음달 15일 지급'], note: '예) 5월 출고 → 7월 15일 지급' }
     ]
   }
 };
 
 // ===== NAVIGATION =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
 function selectBrand(brand) {
   currentBrand = brand;
   answers = {};
   flowIndex = 0;
-
   const color = brand === 'bmw' ? 'bmw' : 'mini';
   document.getElementById('diag-header').className = `app-header ${color}`;
   document.getElementById('result-header').className = `app-header ${color}`;
   document.getElementById('btn-next').className = `btn-primary ${color}`;
   document.getElementById('diag-brand-label').textContent = brand === 'bmw' ? 'BMW TRADE-IN / RIDE AGAIN' : 'MINI NEXT';
   document.getElementById('result-brand-label').textContent = brand === 'bmw' ? 'BMW TRADE-IN / RIDE AGAIN' : 'MINI NEXT';
-
   showScreen('screen-diagnosis');
   renderQuestion();
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function goBack() {
+function goHome() {
   answers = {};
   flowIndex = 0;
-  showScreen('screen-brand');
+  showScreen('screen-home');
 }
 
-// ===== QUESTION RENDER =====
-function getFlow() {
-  return currentBrand === 'bmw' ? buildBmwFlow() : buildMiniFlow();
+function prevStep() {
+  if (flowIndex <= 0) { goHome(); return; }
+  // 현재 질문 답변 삭제 후 이전으로
+  const flow = getFlow();
+  const currentQId = flow[flowIndex];
+  if (currentQId && !RESULT_CODES.includes(currentQId)) delete answers[currentQId];
+  flowIndex--;
+  const prevQId = flow[flowIndex];
+  if (prevQId && !RESULT_CODES.includes(prevQId)) delete answers[prevQId];
+  renderQuestion();
 }
 
+// ===== RENDER =====
 function renderQuestion() {
   const flow = getFlow();
   const qId = flow[flowIndex];
 
-  // 결과 코드에 도달하면 결과 화면으로
-  if (!qId || RESULT_CODES.includes(qId)) {
-    showResult();
-    return;
-  }
+  if (!qId || RESULT_CODES.includes(qId)) { showResult(); return; }
 
-  const qDef = allQuestions[qId];
+  const qDef = Q[qId];
   if (!qDef) { showResult(); return; }
 
-  // 프로그레스: 결과 직전 질문 기준
-  const questionSteps = flow.filter(f => !RESULT_CODES.includes(f));
-  const total = questionSteps.length;
+  const qSteps = flow.filter(f => !RESULT_CODES.includes(f));
+  const total = qSteps.length;
   const current = flowIndex + 1;
   const pct = total > 1 ? (flowIndex / (total - 1)) * 100 : 100;
 
@@ -991,6 +813,9 @@ function renderQuestion() {
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = `${current} / ${total}`;
 
+  // 이전 버튼 표시
+  document.getElementById('btn-prev').style.display = flowIndex === 0 ? 'none' : 'inline';
+
   const optContainer = document.getElementById('q-options');
   optContainer.innerHTML = '';
   const colorClass = currentBrand === 'bmw' ? 'bmw' : 'mini';
@@ -998,10 +823,7 @@ function renderQuestion() {
   qDef.options.forEach(opt => {
     const div = document.createElement('div');
     div.className = 'option' + (answers[qId] === opt.value ? ` selected ${colorClass}` : '');
-    div.innerHTML = `
-      <div class="option-radio"></div>
-      <div class="option-text">${opt.label}${opt.sub ? `<br><span style="font-size:12px;color:var(--gray-400)">${opt.sub}</span>` : ''}</div>
-    `;
+    div.innerHTML = `<div class="option-radio"></div><div class="option-text">${opt.label}${opt.sub ? `<br><span style="font-size:12px;color:var(--gray-400)">${opt.sub}</span>` : ''}</div>`;
     div.onclick = (e) => selectOption(e, qId, opt.value, colorClass);
     optContainer.appendChild(div);
   });
@@ -1011,7 +833,7 @@ function renderQuestion() {
 
 function selectOption(e, qId, value, colorClass) {
   answers[qId] = value;
-  document.querySelectorAll('.option').forEach(o => { o.className = 'option'; });
+  document.querySelectorAll('.option').forEach(o => o.className = 'option');
   e.currentTarget.className = `option selected ${colorClass}`;
   document.getElementById('btn-next').disabled = false;
 }
@@ -1020,93 +842,58 @@ function nextStep() {
   flowIndex++;
   const flow = getFlow();
   const qId = flow[flowIndex];
-  if (!qId || RESULT_CODES.includes(qId)) {
-    showResult();
-  } else {
-    renderQuestion();
-  }
+  if (!qId || RESULT_CODES.includes(qId)) showResult();
+  else renderQuestion();
 }
 
-// ===== RESULT =====
+// ===== RESULT RENDER =====
 function showResult() {
   const result = calcResult();
   const body = document.getElementById('result-body');
-  const colorClass = currentBrand === 'bmw' ? 'bmw' : 'mini';
+  const smsBody = encodeURIComponent('안녕하세요. 트레이드인 문의 드립니다.\n차종 :\n등록일 (연식) :\n주행거리 :\n금융형태 (현금/ 할부 / 리스) :');
   let html = '';
 
-  if (result.possible === true) {
-    html += `
-      <div class="result-card possible">
-        <div class="result-icon">✓</div>
-        <div class="result-promo-name possible">${result.promo}</div>
-        <div class="result-percent possible">${result.percent}%</div>
-        <div class="result-desc">신차 MSRP 기준 트레이드인 지원금</div>
-        ${result.note ? `<div class="result-desc" style="margin-top:6px;font-size:12px;color:var(--gray-400);white-space:pre-line">${result.note}</div>` : ''}
-      </div>
-    `;
-  } else if (result.possible === null) {
-    html += `
-      <div class="result-card" style="background:#fff9e6;border:1.5px solid #ffe082;text-align:center;padding:24px;border-radius:var(--radius);margin-bottom:16px;">
-        <div class="result-icon">!</div>
-        <div style="font-size:15px;font-weight:700;color:#b8860b;margin-bottom:8px">명의 관련 확인 필요</div>
-        <div style="font-size:13px;color:var(--gray-600);line-height:1.6;white-space:pre-line">${result.reason}</div>
-      </div>
-    `;
-  } else if (result.possible === 'quote') {
-    html += `
-      <div class="result-card possible" style="text-align:center">
-        <div class="result-icon">📋</div>
-        <div style="font-size:16px;font-weight:700;color:var(--success);margin-bottom:8px">차량 견적 문의</div>
-        <div style="font-size:13px;color:var(--gray-600)">아래 연락처로 차량 정보를 보내주시면<br>기준 매입가를 안내드립니다.</div>
-      </div>
-    `;
+  if (result.type === 'possible') {
+    html += `<div class="result-card possible">
+      <div class="result-icon">✓</div>
+      <div class="result-promo-name possible">${result.promo}</div>
+      <div class="result-percent">${result.percent}%</div>
+      <div class="result-desc">신차 MSRP 기준 트레이드인 지원금</div>
+    </div>`;
+  } else if (result.type === 'confirm') {
+    html += `<div class="result-card warning">
+      <div class="result-icon">!</div>
+      <div class="result-promo-name warning">명의 관련 확인 필요</div>
+      <div class="result-desc">명의와 관련하여 좀 더 정확한 확인이 필요합니다.\n아래 연락처로 연락 부탁드립니다.</div>
+    </div>`;
+  } else if (result.type === 'quote') {
+    html += `<div class="result-card possible">
+      <div class="result-icon">📋</div>
+      <div class="result-promo-name possible">차량 견적 문의</div>
+      <div class="result-desc">아래 연락처로 차량 정보를 보내주시면\n기준 매입가를 안내드립니다.</div>
+    </div>`;
   } else {
-    html += `
-      <div class="result-card impossible">
-        <div class="result-icon">✗</div>
-        <div class="result-promo-name impossible">트레이드인 불가</div>
-        <div class="result-percent impossible" style="font-size:14px;line-height:1.6;white-space:pre-line">${result.reason}</div>
-      </div>
-    `;
+    html += `<div class="result-card impossible">
+      <div class="result-icon">✗</div>
+      <div class="result-promo-name impossible">트레이드인 불가</div>
+      <div class="result-desc">트레이드인이 불가능합니다.\n추가로 궁금하신 사항은 아래 연락처로 연락 부탁드립니다.</div>
+    </div>`;
   }
 
-  // 문의 버튼
-  const smsBody = encodeURIComponent('안녕하세요! 트레이드인 문의드립니다.\n차종: \n연식: \n주행거리: ');
-  html += `
-    <div class="contact-section">
-      <div class="contact-label">문의하기</div>
-      <div class="contact-buttons">
-        <button class="contact-btn" onclick="window.location.href='tel:01033843507'">
-          <span class="contact-btn-icon">📞</span>
-          <span class="contact-btn-text">전화</span>
-        </button>
-        <button class="contact-btn" onclick="window.location.href='sms:01033843507?body=${smsBody}'">
-          <span class="contact-btn-icon">💬</span>
-          <span class="contact-btn-text">문자</span>
-        </button>
-        <button class="contact-btn" onclick="window.open('https://open.kakao.com/o/sVJ7zkGf','_blank')">
-          <span class="contact-btn-icon">🟡</span>
-          <span class="contact-btn-text">카카오톡</span>
-        </button>
-      </div>
+  html += `<div class="contact-section">
+    <div class="contact-label">문의하기</div>
+    <div class="contact-buttons">
+      <button class="contact-btn" onclick="window.location.href='tel:01033843507'"><span class="contact-btn-icon">📞</span><span class="contact-btn-text">전화</span></button>
+      <button class="contact-btn" onclick="window.location.href='sms:01033843507?body=${smsBody}'"><span class="contact-btn-icon">💬</span><span class="contact-btn-text">문자</span></button>
+      <button class="contact-btn" onclick="window.open('https://open.kakao.com/o/sVJ7zkGf','_blank')"><span class="contact-btn-icon">🟡</span><span class="contact-btn-text">카카오톡</span></button>
     </div>
-  `;
+  </div>`;
 
-  // 서류 안내 (불가 제외하고 표시)
-  if (result.possible !== false) {
+  if (result.type !== 'impossible') {
     html += `<div class="contact-label" style="margin-bottom:10px">필요 서류 안내</div>`;
-    ['lease_personal_biz', 'lease_personal', 'cash_corporate'].forEach(key => {
+    Object.keys(docData).forEach(key => {
       const doc = docData[key];
-      html += `
-        <button class="doc-toggle" onclick="toggleDoc('${key}', this)">
-          <div class="doc-toggle-left">
-            <span class="doc-toggle-icon">📋</span>
-            <span class="doc-toggle-text">${doc.title}</span>
-          </div>
-          <span class="doc-toggle-arrow">▼</span>
-        </button>
-        <div class="doc-content" id="doc-${key}">
-      `;
+      html += `<button class="doc-toggle" onclick="toggleDoc('${key}',this)"><div class="doc-toggle-left"><span class="doc-toggle-icon">📋</span><span class="doc-toggle-text">${doc.title}</span></div><span class="doc-toggle-arrow">▼</span></button><div class="doc-content" id="doc-${key}">`;
       doc.sections.forEach(sec => {
         html += `<div class="doc-section"><div class="doc-section-title">${sec.title}</div>`;
         sec.items.forEach(item => { html += `<div class="doc-item">${item}</div>`; });
@@ -1118,17 +905,15 @@ function showResult() {
   }
 
   html += `<button class="btn-reset" onclick="resetDiagnosis()">← 다시 진단하기</button>`;
-
   body.innerHTML = html;
   showScreen('screen-result');
-  window.scrollTo(0, 0);
 }
 
 function toggleDoc(key, btn) {
-  const content = document.getElementById(`doc-${key}`);
-  const isOpen = content.classList.contains('open');
-  content.classList.toggle('open', !isOpen);
-  btn.classList.toggle('open', !isOpen);
+  const c = document.getElementById(`doc-${key}`);
+  const open = c.classList.contains('open');
+  c.classList.toggle('open', !open);
+  btn.classList.toggle('open', !open);
 }
 
 function resetDiagnosis() {
@@ -1136,6 +921,11 @@ function resetDiagnosis() {
   flowIndex = 0;
   showScreen('screen-diagnosis');
   renderQuestion();
+}
+
+function sendSMS() {
+  const body = encodeURIComponent('안녕하세요. 트레이드인 문의 드립니다.\n차종 :\n등록일 (연식) :\n주행거리 :\n금융형태 (현금/ 할부 / 리스) :');
+  window.location.href = `sms:01033843507?body=${body}`;
 }
 </script>
 <script>
