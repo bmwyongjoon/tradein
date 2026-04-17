@@ -103,6 +103,10 @@
   .option.selected .option-radio::after { opacity: 1; }
   .option-text { font-size: 14px; color: var(--gray-900); line-height: 1.4; }
   .option.selected .option-text { font-weight: 500; }
+  .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-row .btn-primary { flex: 1; margin-top: 0; width: auto; }
+  .btn-secondary { padding: 15px 18px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-size: 15px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; background: var(--white); color: var(--gray-700); transition: all 0.15s; white-space: nowrap; }
+  .btn-secondary:active { transform: scale(0.99); background: var(--gray-100); }
   .btn-primary { width: 100%; padding: 15px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: all 0.15s; margin-top: 20px; }
   .btn-primary:active { transform: scale(0.99); }
   .btn-primary.bmw { background: var(--bmw-blue); color: #fff; }
@@ -178,6 +182,11 @@
     <div class="menu-card" onclick="showScreen('screen-handover')">
       <span class="menu-icon">🚗</span>
       <span class="menu-text">지정 반납 안내</span>
+      <span class="menu-arrow">›</span>
+    </div>
+    <div class="menu-card" onclick="showScreen('screen-install')">
+      <span class="menu-icon">📲</span>
+      <span class="menu-text">앱 설치 방법</span>
       <span class="menu-arrow">›</span>
     </div>
   </div>
@@ -293,13 +302,64 @@
   </div>
 </div>
 
+<!-- ===== 앱 설치 방법 ===== -->
+<div id="screen-install" class="screen">
+  <div class="info-header">
+    <div class="info-header-top">
+      <span class="info-header-back" onclick="showScreen('screen-home')">← 뒤로</span>
+    </div>
+    <div class="info-header-title">앱 설치 방법</div>
+  </div>
+  <div class="info-body">
+    <div class="info-section">
+      <div class="info-section-title">iPhone / iPad (Safari)</div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 1</div>
+        <div class="info-step-text">Safari 브라우저로 이 페이지를 열어주세요.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 2</div>
+        <div class="info-step-text">하단 가운데 <strong>공유 버튼 (□↑)</strong> 을 탭합니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 3</div>
+        <div class="info-step-text"><strong>홈 화면에 추가</strong>를 탭합니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 4</div>
+        <div class="info-step-text">오른쪽 상단 <strong>추가</strong>를 탭하면 설치 완료!</div>
+      </div>
+      <div class="info-note">※ Chrome 등 다른 브라우저에서는 Safari로 다시 열어주세요.</div>
+    </div>
+    <div class="info-section">
+      <div class="info-section-title">Android (Chrome)</div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 1</div>
+        <div class="info-step-text">Chrome 브라우저로 이 페이지를 열어주세요.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 2</div>
+        <div class="info-step-text">주소창 오른쪽 <strong>⋮ 메뉴</strong>를 탭합니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 3</div>
+        <div class="info-step-text"><strong>홈 화면에 추가</strong> 또는 <strong>앱 설치</strong>를 탭합니다.</div>
+      </div>
+      <div class="info-step">
+        <div class="info-step-num">STEP 4</div>
+        <div class="info-step-text"><strong>설치</strong>를 탭하면 완료!</div>
+      </div>
+      <div class="info-note">※ 설치 후 홈 화면에서 바로 실행할 수 있습니다.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== DIAGNOSIS ===== -->
 <div id="screen-diagnosis" class="screen">
   <div id="diag-header" class="app-header bmw">
     <div class="header-top">
       <span class="header-brand" id="diag-brand-label">BMW TRADE-IN / RIDE AGAIN</span>
       <div class="header-nav">
-        <span class="header-back-q" id="btn-prev" onclick="prevStep()">← 이전</span>
         <span class="header-home" onclick="goHome()">홈</span>
       </div>
     </div>
@@ -312,7 +372,10 @@
     <div class="question-text" id="q-text"></div>
     <div class="question-hint" id="q-hint"></div>
     <div class="options" id="q-options"></div>
-    <button class="btn-primary bmw" id="btn-next" onclick="nextStep()" disabled>다음</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-prev" onclick="prevStep()" style="display:none">← 이전</button>
+      <button class="btn-primary bmw" id="btn-next" onclick="nextStep()" disabled>다음</button>
+    </div>
   </div>
 </div>
 
@@ -905,7 +968,7 @@ function renderQuestion() {
   document.getElementById('progress-text').textContent = `${current} / ${total}`;
 
   // 이전 버튼 표시
-  document.getElementById('btn-prev').style.display = flowIndex === 0 ? 'none' : 'inline';
+  document.getElementById('btn-prev').style.display = flowIndex === 0 ? 'none' : 'block';
 
   const optContainer = document.getElementById('q-options');
   optContainer.innerHTML = '';
