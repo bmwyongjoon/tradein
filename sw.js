@@ -1,4 +1,4 @@
-const CACHE = 'tradein-v4';
+const CACHE = 'tradein-v5';
 const ASSETS = [
   './',
   './index.html',
