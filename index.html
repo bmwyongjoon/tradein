@@ -367,15 +367,16 @@ const Q = {
     text: '구차의 브랜드는 무엇인가요?',
     hint: '',
     options: [
-      { value: 'bmw', label: 'BMW / MINI', sub: '→ Trade-in 또는 Ride Again' },
+      { value: 'bmw', label: 'BMW', sub: '→ Trade-in 3% 또는 Ride Again 3%' },
+      { value: 'mini', label: 'MINI', sub: '→ Trade-in/Ride Again 1~2%' },
       { value: 'strategic', label: '전략차종', sub: 'MB(S-Class·CLS·EQS·G-Wagen·GLS), Audi(A8·Q8), Genesis(G90·EQ900)' },
-      { value: 'premium', label: '프리미엄 브랜드', sub: 'MB, Audi, MINI, Porsche, Genesis' },
+      { value: 'premium', label: '프리미엄 브랜드', sub: 'MB, Audi, Porsche, Genesis' },
       { value: 'ev', label: '전기차 브랜드', sub: 'Tesla 전 차종' },
       { value: 'other', label: '그 외 브랜드' }
     ]
   },
   bmw_purchase_type: {
-    text: 'BMW/MINI 구차를 어떻게 구매하셨나요?',
+    text: 'BMW 구차를 어떻게 구매하셨나요?',
     hint: '',
     options: [
       { value: 'new', label: '신차 구매' },
@@ -386,7 +387,7 @@ const Q = {
     ]
   },
   bmw_reg7: {
-    text: 'BMW/MINI 구차의 최초 등록일이 7년 이내인가요?',
+    text: 'BMW 구차의 최초 등록일이 7년 이내인가요?',
     hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내\n※ 신차구매 + 7년 초과 → Ride Again / 중고구매 + 7년 초과 → 불가',
     options: [
       { value: 'yes', label: 'YES — 7년 이내 (2019년 이후 등록)' },
@@ -493,6 +494,50 @@ const Q = {
       { value: 'no', label: 'NO' }
     ]
   },
+  // MINI 구차 (BMW 신차 구매 플로우)
+  mini_bmw_purchase_type: {
+    text: 'MINI 구차를 어떻게 구매하셨나요?',
+    hint: '',
+    options: [
+      { value: 'new', label: '신차 구매' },
+      { value: 'used', label: '중고 구매' },
+      { value: 'consign', label: '위탁판매 차량' },
+      { value: 'rental_done', label: '렌터카 이용 후 일반 개인/법인으로 이전한 상태' },
+      { value: 'rental_now', label: '현재 렌터카 이용 중' }
+    ]
+  },
+  mini_bmw_reg7: {
+    text: 'MINI 구차의 최초 등록일이 7년 이내인가요?',
+    hint: '연단위 계산 / 2019년 이후 최초등록 → 7년 이내\n※ 신차구매 + 7년 초과 → Ride Again / 중고구매 + 7년 초과 → 불가',
+    options: [
+      { value: 'yes', label: 'YES — 7년 이내 (2019년 이후 등록)' },
+      { value: 'no', label: 'NO — 7년 초과 (2018년 이전 등록)' }
+    ]
+  },
+  mini_bmw_60: {
+    text: '구차 보유 기간이 60일 이상인가요?',
+    hint: 'BPS 반납 예정일 기준',
+    options: [
+      { value: 'yes', label: 'YES — 60일 이상' },
+      { value: 'no', label: 'NO — 60일 미만' }
+    ]
+  },
+  mini_bmw_used_180: {
+    text: '구차 보유 기간이 180일 이상인가요?',
+    hint: 'BPS 반납 예정일 기준',
+    options: [
+      { value: 'yes', label: 'YES — 180일 이상' },
+      { value: 'no', label: 'NO — 180일 미만' }
+    ]
+  },
+  mini_bmw_7series: {
+    text: '구매하실 BMW 신차가 7시리즈인가요?',
+    hint: '7시리즈 구매 시 지원금 2%, 그 외 모델은 1%',
+    options: [
+      { value: 'yes', label: 'YES — 7시리즈 구매' },
+      { value: 'no', label: 'NO — 그 외 모델' }
+    ]
+  },
   // 전기차
   ev_condition: {
     text: '전기차 구차의 구매 방법과 최초등록일은?',
@@ -557,7 +602,7 @@ const Q = {
   }
 };
 
-const RESULT_CODES = ['__r3__','__r2__','__r1__','__ride__','__confirm__','__impossible__','__quote__'];
+const RESULT_CODES = ['__r3__','__r2__','__r1__','__ride__','__ride2__','__ride1__','__confirm__','__impossible__','__quote__'];
 
 // ===== BMW FLOW =====
 function buildBmwFlow() {
@@ -613,6 +658,50 @@ function buildBmwFlow() {
       if (!a.bmw_used_180) return f;
       if (a.bmw_used_180 === 'yes') { f.push('__r3__'); return f; }
       f.push('__impossible__'); return f;
+    }
+  }
+
+  // MINI 구차
+  if (a.car_brand === 'mini') {
+    f.push('mini_bmw_purchase_type');
+    if (!a.mini_bmw_purchase_type) return f;
+    if (a.mini_bmw_purchase_type === 'consign') { f.push('__impossible__'); return f; }
+    if (a.mini_bmw_purchase_type === 'rental_now') { f.push('__impossible__'); return f; }
+
+    f.push('mini_bmw_reg7');
+    if (!a.mini_bmw_reg7) return f;
+
+    if (a.mini_bmw_purchase_type === 'new') {
+      if (a.mini_bmw_reg7 === 'yes') {
+        // 신차 + 7년이내 → Trade-in / 60일 확인
+        f.push('mini_bmw_60');
+        if (!a.mini_bmw_60) return f;
+        if (a.mini_bmw_60 === 'no') { f.push('__impossible__'); return f; }
+        f.push('mini_bmw_7series');
+        if (!a.mini_bmw_7series) return f;
+        if (a.mini_bmw_7series === 'yes') { f.push('__r2__'); return f; }
+        f.push('__r1__'); return f;
+      } else {
+        // 신차 + 7년초과 → Ride Again / 60일 확인
+        f.push('mini_bmw_60');
+        if (!a.mini_bmw_60) return f;
+        if (a.mini_bmw_60 === 'no') { f.push('__impossible__'); return f; }
+        f.push('mini_bmw_7series');
+        if (!a.mini_bmw_7series) return f;
+        if (a.mini_bmw_7series === 'yes') { f.push('__ride2__'); return f; }
+        f.push('__ride1__'); return f;
+      }
+    } else {
+      // 중고/렌터카이전 → 7년초과면 불가
+      if (a.mini_bmw_reg7 === 'no') { f.push('__impossible__'); return f; }
+      // 7년이내 → 180일 확인
+      f.push('mini_bmw_used_180');
+      if (!a.mini_bmw_used_180) return f;
+      if (a.mini_bmw_used_180 === 'no') { f.push('__impossible__'); return f; }
+      f.push('mini_bmw_7series');
+      if (!a.mini_bmw_7series) return f;
+      if (a.mini_bmw_7series === 'yes') { f.push('__r2__'); return f; }
+      f.push('__r1__'); return f;
     }
   }
 
@@ -715,6 +804,8 @@ function calcResult() {
   const last = flow[flow.length - 1];
   if (last === '__r3__') return { type: 'possible', promo: 'Trade-in', percent: 3 };
   if (last === '__ride__') return { type: 'possible', promo: 'Ride Again', percent: 3 };
+  if (last === '__ride2__') return { type: 'possible', promo: 'Ride Again', percent: 2 };
+  if (last === '__ride1__') return { type: 'possible', promo: 'Ride Again', percent: 1 };
   if (last === '__r2__') return { type: 'possible', promo: currentBrand === 'mini' ? 'MINI Next' : 'Trade-in', percent: 2 };
   if (last === '__r1__') return { type: 'possible', promo: 'Trade-in', percent: 1 };
   if (last === '__confirm__') return { type: 'confirm' };
