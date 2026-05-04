@@ -662,10 +662,44 @@ const Q = {
       { value: 'yes', label: 'YES — 7년 이내 (2019년 이후 등록)' },
       { value: 'no', label: 'NO — 7년 초과 (2018년 이전 등록)' }
     ]
+  },
+  // BMW 구차 Trade-in 신차 모델 선택 (2-1)
+  bmw_new_model: {
+    text: '구매하실 BMW 신차 모델은 무엇인가요?',
+    hint: '',
+    options: [
+      { value: 'premium', label: '5시리즈 / X5 / 7시리즈' },
+      { value: 'other', label: '그 외 모델' }
+    ]
+  },
+  // Ride Again 구차 브랜드 분리 (2-2)
+  ride_car_brand: {
+    text: '구차 브랜드를 선택해주세요.',
+    hint: '',
+    options: [
+      { value: 'bmw', label: 'BMW' },
+      { value: 'mini', label: 'MINI' }
+    ]
+  },
+  bmw_ride_model: {
+    text: '구매하실 BMW 신차 모델은 무엇인가요?',
+    hint: '',
+    options: [
+      { value: 'premium', label: '5시리즈 / X5 / 7시리즈' },
+      { value: 'other', label: '그 외 모델' }
+    ]
+  },
+  mini_ride_model: {
+    text: '구매하실 MINI 신차 모델은 무엇인가요?',
+    hint: '',
+    options: [
+      { value: 'bmw7', label: '7시리즈 구매 (BMW 7시리즈로 구매하는 경우)' },
+      { value: 'other', label: '그 외 모델' }
+    ]
   }
 };
 
-const RESULT_CODES = ['__r3__','__r2__','__r1__','__ride__','__ride2__','__ride1__','__confirm__','__impossible__','__quote__'];
+const RESULT_CODES = ['__r4__','__r3__','__r2__','__r1__','__ride4__','__ride__','__ride2__','__ride1__','__confirm__','__impossible__','__quote__'];
 
 // ===== BMW FLOW =====
 function buildBmwFlow() {
@@ -704,13 +738,34 @@ function buildBmwFlow() {
         // 신차+7년이내 → Trade-in / 60일 확인
         f.push('bmw_60');
         if (!a.bmw_60) return f;
-        if (a.bmw_60 === 'yes') { f.push('__r3__'); return f; }
+        if (a.bmw_60 === 'yes') {
+          // 2-1: 신차 모델 선택 (5/X5/7 → 4%, 그 외 → 3%)
+          f.push('bmw_new_model');
+          if (!a.bmw_new_model) return f;
+          if (a.bmw_new_model === 'premium') { f.push('__r4__'); return f; }
+          f.push('__r3__'); return f;
+        }
         f.push('__impossible__'); return f;
       } else {
         // 신차+7년초과 → Ride Again / 60일 확인
         f.push('bmw_60');
         if (!a.bmw_60) return f;
-        if (a.bmw_60 === 'yes') { f.push('__ride__'); return f; }
+        if (a.bmw_60 === 'yes') {
+          // 2-2: 구차 브랜드 선택 → BMW/MINI Ride Again 분기
+          f.push('ride_car_brand');
+          if (!a.ride_car_brand) return f;
+          if (a.ride_car_brand === 'bmw') {
+            f.push('bmw_ride_model');
+            if (!a.bmw_ride_model) return f;
+            if (a.bmw_ride_model === 'premium') { f.push('__ride4__'); return f; }
+            f.push('__ride__'); return f;
+          } else {
+            f.push('mini_ride_model');
+            if (!a.mini_ride_model) return f;
+            if (a.mini_ride_model === 'bmw7') { f.push('__ride2__'); return f; }
+            f.push('__ride1__'); return f;
+          }
+        }
         f.push('__impossible__'); return f;
       }
     } else {
@@ -719,7 +774,13 @@ function buildBmwFlow() {
       // 7년이내 → 180일 확인
       f.push('bmw_used_180');
       if (!a.bmw_used_180) return f;
-      if (a.bmw_used_180 === 'yes') { f.push('__r3__'); return f; }
+      if (a.bmw_used_180 === 'yes') {
+        // 2-1: 신차 모델 선택 (5/X5/7 → 4%, 그 외 → 3%)
+        f.push('bmw_new_model');
+        if (!a.bmw_new_model) return f;
+        if (a.bmw_new_model === 'premium') { f.push('__r4__'); return f; }
+        f.push('__r3__'); return f;
+      }
       f.push('__impossible__'); return f;
     }
   }
@@ -749,9 +810,10 @@ function buildBmwFlow() {
         f.push('mini_bmw_60');
         if (!a.mini_bmw_60) return f;
         if (a.mini_bmw_60 === 'no') { f.push('__impossible__'); return f; }
-        f.push('mini_bmw_7series');
-        if (!a.mini_bmw_7series) return f;
-        if (a.mini_bmw_7series === 'yes') { f.push('__ride2__'); return f; }
+        // 2-2: MINI 구차 Ride Again 신차 모델 선택
+        f.push('mini_ride_model');
+        if (!a.mini_ride_model) return f;
+        if (a.mini_ride_model === 'bmw7') { f.push('__ride2__'); return f; }
         f.push('__ride1__'); return f;
       }
     } else {
@@ -865,7 +927,9 @@ function getFlow() { return currentBrand === 'bmw' ? buildBmwFlow() : buildMiniF
 function calcResult() {
   const flow = getFlow();
   const last = flow[flow.length - 1];
+  if (last === '__r4__') return { type: 'possible', promo: 'Trade-in', percent: 4 };
   if (last === '__r3__') return { type: 'possible', promo: 'Trade-in', percent: 3 };
+  if (last === '__ride4__') return { type: 'possible', promo: 'Ride Again', percent: 4 };
   if (last === '__ride__') return { type: 'possible', promo: 'Ride Again', percent: 3 };
   if (last === '__ride2__') return { type: 'possible', promo: 'Ride Again', percent: 2 };
   if (last === '__ride1__') return { type: 'possible', promo: 'Ride Again', percent: 1 };
