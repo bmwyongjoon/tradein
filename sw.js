@@ -1,4 +1,4 @@
-const CACHE = 'tradein-v5';
+const CACHE = 'tradein-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -11,7 +11,12 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(c => c.addAll(ASSETS))
   );
-  self.skipWaiting();
+});
+
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', e => {
@@ -21,6 +26,9 @@ self.addEventListener('activate', e => {
     )
   );
   self.clients.claim();
+  self.clients.matchAll({ type: 'window' }).then(clients => {
+    clients.forEach(client => client.postMessage({ type: 'SW_UPDATED' }));
+  });
 });
 
 self.addEventListener('fetch', e => {

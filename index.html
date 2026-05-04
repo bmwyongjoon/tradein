@@ -1146,12 +1146,60 @@ function sendSMS() {
   window.location.href = `sms:01033843507?body=${body}`;
 }
 </script>
+<div id="update-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:16px; padding:28px 24px; width:280px; text-align:center;">
+    <div style="font-size:28px; margin-bottom:12px">🔄</div>
+    <div style="font-size:16px; font-weight:700; color:#1a1a2e; margin-bottom:8px">업데이트 알림</div>
+    <div style="font-size:13px; color:#5f6368; line-height:1.6; margin-bottom:20px">
+      새로운 버전이 있습니다.<br>업데이트 후 최신 정보를 확인하세요.
+    </div>
+    <button onclick="applyUpdate()" style="width:100%; padding:13px; background:#1c3d6e; color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:700; font-family:'Noto Sans KR',sans-serif; cursor:pointer; margin-bottom:8px">
+      업데이트
+    </button>
+    <button onclick="dismissUpdate()" style="width:100%; padding:11px; background:#fff; color:#9aa0a9; border:1.5px solid #e8eaed; border-radius:10px; font-size:14px; font-family:'Noto Sans KR',sans-serif; cursor:pointer">
+      나중에
+    </button>
+  </div>
+</div>
+
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js');
     });
   }
+</script>
+<script>
+let newWorker;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', e => {
+    if (e.data && e.data.type === 'SW_UPDATED') {
+      document.getElementById('update-popup').style.display = 'flex';
+    }
+  });
+
+  navigator.serviceWorker.ready.then(reg => {
+    reg.addEventListener('updatefound', () => {
+      newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          document.getElementById('update-popup').style.display = 'flex';
+        }
+      });
+    });
+  });
+}
+
+function applyUpdate() {
+  document.getElementById('update-popup').style.display = 'none';
+  if (newWorker) newWorker.postMessage({ type: 'SKIP_WAITING' });
+  window.location.reload();
+}
+
+function dismissUpdate() {
+  document.getElementById('update-popup').style.display = 'none';
+}
 </script>
 </body>
 </html>
